@@ -1,5 +1,4 @@
-package QuanlyCHhoa;
-
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
@@ -47,10 +46,10 @@ public class QuanlyCuaHang {
     }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            loadCustomFont("C:\\Users\\Admin\\Downloads\\[cnttqn.net] UTM Beautiful Caps.ttf");
+            loadCustomFont("Cosmopolitan Script Medium.ttf");
             frame = new JFrame("QUẢN LÝ CỦA HÀNG HOA");
             JLabel Anh = new JLabel();
-            JTextArea Vanban =  new JTextArea(20,80);
+            JTextArea Vanban =  new JTextArea(20,800);
             Vanban.setBackground(Color.RED);
             Vanban.setForeground(Color.WHITE);
             JScrollPane scrollPane = new JScrollPane(Vanban);
@@ -86,7 +85,7 @@ public class QuanlyCuaHang {
                     dialog.setLocationRelativeTo(null);
                     dialog.getContentPane().setBackground(Color.RED);
                     try{
-                        String VanbanGth = "E:\\code\\Java\\QuanlyCHhoa\\gioithieu.txt";
+                        String VanbanGth = "Gth.txt";
                         BufferedReader Doc = new BufferedReader(new FileReader(VanbanGth));
                         StringBuilder content = new StringBuilder();
                         String line;
@@ -123,6 +122,12 @@ public class QuanlyCuaHang {
                
             JMenu Sanpham = new JMenu("Sản Phẩm");
                 JMenuItem HoaCatCanh = new JMenuItem("Hoa cắt cành");
+                HoaCatCanh.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        CuasoHoacatcanh();
+                }});
+                
                 JMenuItem PhanBon = new JMenuItem("Phân Bón");
                 JMenuItem Latrangtri = new JMenuItem("Lá Trang Trí");
                 JMenuItem HoaNhapKhau = new JMenuItem("Hoa Nhập Khẩu");
@@ -178,19 +183,18 @@ public class QuanlyCuaHang {
             frame.setJMenuBar(menuBar1);
 
             JLabel Tieude = new JLabel("THE FLOWER SHOP");
-            Font customFont = new Font("MyFont",Font.BOLD,40);
+            Font customFont = new Font("customFont",Font.BOLD,40);
             Tieude.setFont(customFont);
             Tieude.setForeground(Color.BLUE);
             frame.add(Tieude);
 
-            
             frame.add(Anh);
             frame.addComponentListener((new ComponentAdapter() {
                 @Override
                 public void componentResized(ComponentEvent e){
                     int ChieuRongCuaSO = frame.getContentPane().getWidth();
                     int ChieuCaoCuaSO = frame.getContentPane().getHeight();
-                    String imagePath = "E:\\code\\Java\\QuanlyCHhoa\\hoa.jpg";
+                    String imagePath = "hoa.jpg";
                     try{
                         BufferedImage originalImage = ImageIO.read(new File(imagePath));
                         Image Anhresized = originalImage.getScaledInstance(ChieuRongCuaSO, ChieuCaoCuaSO, Image.SCALE_SMOOTH);
@@ -203,10 +207,36 @@ public class QuanlyCuaHang {
             }));
             
 
-            frame.setSize(1300,700);
+            frame.setSize(600,500);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLayout(new FlowLayout());
             frame.setVisible(true);
         });
+    }
+    private static void CuasoHoacatcanh(){
+    frame.dispose(); //tam thoi tat cua so hien tai
+        JDialog dialogHoacatcanh = new JDialog(frame, "Hoa Cắt Cành", Dialog.ModalityType.APPLICATION_MODAL);
+                    dialogHoacatcanh.setSize(frame.getContentPane().getSize());
+                    ImageIcon backgroundIcon = new ImageIcon("hoacatcanh.jpg");
+                    JLabel backgroundLabel = new JLabel(backgroundIcon);
+                    backgroundLabel.setLayout(new BorderLayout());
+                    dialogHoacatcanh.setContentPane(backgroundLabel);
+                    dialogHoacatcanh.setLayout(new FlowLayout());
+                    
+                    Image scaledImage = nenHoacatcanh.getScaledInstance(dialogHoacatcanh.getWidth(), dialogHoacatcanh.getHeight(), Image.SCALE_SMOOTH);
+                    ImageIcon backgroundIcon = new ImageIcon(scaledImage);
+                    
+                    backgroundLabel.setLayout(new BorderLayout());
+                    dialogHoacatcanh.setContentPane(new JLabel(backgroundIcon));
+                    dialogHoacatcanh.setLocationRelativeTo(null);
+                    dialogHoacatcanh.revalidate();
+                    dialogHoacatcanh.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                    dialogHoacatcanh.addWindowListener(new java.awt.event.WindowAdapter() {
+                        @Override
+                        public void windowClosing(java.awt.event.WindowEvent windowEvent){
+                            frame.setVisible(true);
+                        }
+                    });
+                    dialogHoacatcanh.setVisible(true);
     }
 }
