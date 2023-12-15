@@ -1,11 +1,15 @@
+
+
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,20 +24,33 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 public class QuanlyCuaHang {
     private static JFrame frame;
+    private static JPanel contentPanel;
+    private static JDialog dialogHoaHong;
+    
+    private static JFrame loginFrame;
+    private static JTextField usernameField;
+    private static JPasswordField passwordField;
+
     private static void loadCustomFont(String fontPath){
         try{
             File fontFile = new File(fontPath);
@@ -44,7 +61,63 @@ public class QuanlyCuaHang {
             e.printStackTrace();
         }
     }
-    public static void main(String[] args) {
+
+    public static void main(String[] agrs){
+        SwingUtilities.invokeLater(() -> {
+            GiaodienDangnhap();
+        });
+    }
+    private static void GiaodienDangnhap() {
+        loginFrame = new JFrame("Đăng Nhập");
+        loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        loginFrame.setSize(400,200);
+        loginFrame.setLayout(new BorderLayout());
+
+        JPanel loginPanel = new JPanel();
+        loginPanel.setLayout(new GridLayout(3,2));
+
+        JLabel usernameLabel = new JLabel("Tên đăng nhập: ");
+        usernameField = new JTextField();
+
+        JLabel passwordLabel = new JLabel("Mật khẩu: ");
+        passwordField = new JPasswordField();
+
+        JButton loginButton = new JButton("Đăng Nhập");
+
+        loginButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = usernameField.getText();
+                String password = new String(passwordField.getPassword());
+
+                boolean isAuthenticated = authenticate(username, password);
+
+                if (isAuthenticated) {
+                    loginFrame.dispose();
+                    Openmain(username);
+                } else {
+                    JOptionPane.showMessageDialog(loginFrame, "Invalid username or password", "Login Failed", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        loginPanel.add(usernameLabel);
+        loginPanel.add(usernameField);
+        loginPanel.add(passwordLabel);
+        loginPanel.add(passwordField);
+        loginPanel.add(new JLabel()); // Empty label for spacing
+        loginPanel.add(loginButton);
+
+        loginFrame.add(loginPanel, BorderLayout.CENTER);
+        loginFrame.setVisible(true);
+    }
+
+    private static boolean authenticate(String username, String password) {
+        // Perform authentication logic here
+        // For simplicity, let's consider any non-empty username and password as valid
+        return !username.isEmpty() && !password.isEmpty();
+    }
+
+    public static void Openmain(String username) {
         SwingUtilities.invokeLater(() -> {
             loadCustomFont("Cosmopolitan Script Medium.ttf");
             frame = new JFrame("QUẢN LÝ CỦA HÀNG HOA");
@@ -52,7 +125,6 @@ public class QuanlyCuaHang {
             JTextArea Vanban =  new JTextArea(20,800);
             Vanban.setBackground(Color.RED);
             Vanban.setForeground(Color.WHITE);
-            JScrollPane scrollPane = new JScrollPane(Vanban);
 
             JMenuBar menuBar1 = new JMenuBar();
             Dimension menuBar1size = menuBar1.getPreferredSize();
@@ -121,20 +193,20 @@ public class QuanlyCuaHang {
             });
                
             JMenu Sanpham = new JMenu("Sản Phẩm");
-                JMenuItem HoaCatCanh = new JMenuItem("Hoa cắt cành");
-                HoaCatCanh.addActionListener(new ActionListener() {
+                JMenuItem HoaHong = new JMenuItem("Hoa Hồng");
+                HoaHong.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        CuasoHoacatcanh();
+                        CuasoHoaHong();
                 }});
                 
-                JMenuItem PhanBon = new JMenuItem("Phân Bón");
+                JMenuItem HoaTulip = new JMenuItem("Hoa Tu Lip");
                 JMenuItem Latrangtri = new JMenuItem("Lá Trang Trí");
-                JMenuItem HoaNhapKhau = new JMenuItem("Hoa Nhập Khẩu");
-                Sanpham.add(HoaCatCanh);
-                Sanpham.add(PhanBon);
+                JMenuItem HoaCamtuCau = new JMenuItem("Hoa Cẩm Tú Cầu");
+                Sanpham.add(HoaHong);
+                Sanpham.add(HoaTulip);
                 Sanpham.add(Latrangtri);
-                Sanpham.add(HoaNhapKhau);
+                Sanpham.add(HoaCamtuCau);
             Sanpham.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e){
@@ -213,30 +285,68 @@ public class QuanlyCuaHang {
             frame.setVisible(true);
         });
     }
-    private static void CuasoHoacatcanh(){
-    frame.dispose(); //tam thoi tat cua so hien tai
-        JDialog dialogHoacatcanh = new JDialog(frame, "Hoa Cắt Cành", Dialog.ModalityType.APPLICATION_MODAL);
-                    dialogHoacatcanh.setSize(frame.getContentPane().getSize());
-                    ImageIcon backgroundIcon = new ImageIcon("hoacatcanh.jpg");
-                    JLabel backgroundLabel = new JLabel(backgroundIcon);
-                    backgroundLabel.setLayout(new BorderLayout());
-                    dialogHoacatcanh.setContentPane(backgroundLabel);
-                    dialogHoacatcanh.setLayout(new FlowLayout());
-                    
-                    Image scaledImage = nenHoacatcanh.getScaledInstance(dialogHoacatcanh.getWidth(), dialogHoacatcanh.getHeight(), Image.SCALE_SMOOTH);
-                    ImageIcon backgroundIcon = new ImageIcon(scaledImage);
-                    
-                    backgroundLabel.setLayout(new BorderLayout());
-                    dialogHoacatcanh.setContentPane(new JLabel(backgroundIcon));
-                    dialogHoacatcanh.setLocationRelativeTo(null);
-                    dialogHoacatcanh.revalidate();
-                    dialogHoacatcanh.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                    dialogHoacatcanh.addWindowListener(new java.awt.event.WindowAdapter() {
-                        @Override
-                        public void windowClosing(java.awt.event.WindowEvent windowEvent){
-                            frame.setVisible(true);
-                        }
-                    });
-                    dialogHoacatcanh.setVisible(true);
+    private static void CuasoHoaHong(){
+        System.out.println("Mo cua so Hoa hong");
+        frame.dispose(); //tam thoi tat cua so frame
+        dialogHoaHong = new JDialog(frame, "Hoa Hồng", Dialog.ModalityType.APPLICATION_MODAL);
+        dialogHoaHong.setSize(frame.getContentPane().getSize());
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new BorderLayout());
+        dialogHoaHong.setContentPane(contentPanel);
+        
+        addImagesAndTextToPanel();
+
+        dialogHoaHong.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent er){
+            resizeImage();
+            }
+        });
+        resizeImage();
+        dialogHoaHong.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialogHoaHong.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent){
+                frame.setVisible(true);
+            }
+        });
+        dialogHoaHong.setLocationRelativeTo(null);
+        dialogHoaHong.setVisible(true);
+    }
+
+    private static void addImagesAndTextToPanel(){
+        ImageIcon anh1 = new ImageIcon("hoahongdo.jpg");
+        JLabel label1 = new JLabel(anh1);
+        contentPanel.add(label1, BorderLayout.NORTH);
+
+        ImageIcon anh2 = new ImageIcon("hoahong.jpg");
+        JLabel label2 = new JLabel(anh2);
+        contentPanel.add(label2, BorderLayout.CENTER);
+        
+        JTextArea textArea = new JTextArea("Đây là mô tả về hoa hồng...");
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        contentPanel.add(scrollPane, BorderLayout.SOUTH);
+    }
+
+    private static void resizeImage() {
+        if (contentPanel != null && dialogHoaHong != null && contentPanel.getWidth()>0 && contentPanel.getHeight() >0){            
+            Component[] components = contentPanel.getComponents();
+            for (Component component : components) {
+                if (component instanceof JLabel) {
+                    JLabel label = (JLabel) component;
+                    Icon icon = label.getIcon();
+                    if (icon instanceof ImageIcon){
+                        Image image = ((ImageIcon) icon).getImage();
+                        Image resizedImage = image.getScaledInstance(label.getWidth(),label.getHeight(), Image.SCALE_SMOOTH);
+                        label.setIcon(new ImageIcon(resizedImage));
+                    }
+                }
+            }
+            contentPanel.revalidate();
+            contentPanel.repaint();
+            dialogHoaHong.revalidate();
+            dialogHoaHong.repaint();
+        }
     }
 }
