@@ -1,4 +1,4 @@
-
+package QuanlyCHhoa;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -36,7 +36,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -46,6 +45,9 @@ public class QuanlyCuaHang {
     private static JFrame frame;
     private static JPanel contentPanel;
     private static JDialog dialogHoaHong;
+    private static JDialog dialogHoaTulip;
+    private static JDialog dialogLatrangtri;
+    private static JDialog dialogHoaCamtuCau;
     
     private static JFrame loginFrame;
     private static JTextField usernameField;
@@ -72,6 +74,7 @@ public class QuanlyCuaHang {
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         loginFrame.setSize(400,200);
         loginFrame.setLayout(new BorderLayout());
+        loginFrame.setLocationRelativeTo(null);
 
         JPanel loginPanel = new JPanel();
         loginPanel.setLayout(new GridLayout(3,2));
@@ -94,6 +97,8 @@ public class QuanlyCuaHang {
 
                 if (isAuthenticated) {
                     loginFrame.dispose();
+                    JOptionPane.showMessageDialog(loginFrame, "Welcome","Login Success", JOptionPane.INFORMATION_MESSAGE);
+
                     Openmain(username);
                 } else {
                     JOptionPane.showMessageDialog(loginFrame, "Invalid username or password", "Login Failed", JOptionPane.ERROR_MESSAGE);
@@ -121,6 +126,7 @@ public class QuanlyCuaHang {
         SwingUtilities.invokeLater(() -> {
             loadCustomFont("Cosmopolitan Script Medium.ttf");
             frame = new JFrame("QUẢN LÝ CỦA HÀNG HOA");
+            frame.setLocationRelativeTo(null);
             JLabel Anh = new JLabel();
             JTextArea Vanban =  new JTextArea(20,800);
             Vanban.setBackground(Color.RED);
@@ -201,8 +207,26 @@ public class QuanlyCuaHang {
                 }});
                 
                 JMenuItem HoaTulip = new JMenuItem("Hoa Tu Lip");
+                HoaTulip.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        CuasoHoaTulip();
+                }});
+
                 JMenuItem Latrangtri = new JMenuItem("Lá Trang Trí");
+                Latrangtri.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        CuasoLatrangtri();
+                }});
+
                 JMenuItem HoaCamtuCau = new JMenuItem("Hoa Cẩm Tú Cầu");
+                HoaCamtuCau.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        CuasoHoaCamtuCau();
+                }});
+
                 Sanpham.add(HoaHong);
                 Sanpham.add(HoaTulip);
                 Sanpham.add(Latrangtri);
@@ -285,6 +309,7 @@ public class QuanlyCuaHang {
             frame.setVisible(true);
         });
     }
+
     private static void CuasoHoaHong(){
         System.out.println("Mo cua so Hoa hong");
         frame.dispose(); //tam thoi tat cua so frame
@@ -294,7 +319,7 @@ public class QuanlyCuaHang {
         contentPanel.setLayout(new BorderLayout());
         dialogHoaHong.setContentPane(contentPanel);
         
-        addImagesAndTextToPanel();
+        AnhvaTextHoahong();
 
         dialogHoaHong.addComponentListener(new ComponentAdapter() {
             @Override
@@ -314,19 +339,189 @@ public class QuanlyCuaHang {
         dialogHoaHong.setVisible(true);
     }
 
-    private static void addImagesAndTextToPanel(){
+    private static void AnhvaTextHoahong(){
         ImageIcon anh1 = new ImageIcon("hoahongdo.jpg");
         JLabel label1 = new JLabel(anh1);
-        contentPanel.add(label1, BorderLayout.NORTH);
+        contentPanel.add(label1, BorderLayout.WEST);
 
         ImageIcon anh2 = new ImageIcon("hoahong.jpg");
         JLabel label2 = new JLabel(anh2);
         contentPanel.add(label2, BorderLayout.CENTER);
         
-        JTextArea textArea = new JTextArea("Đây là mô tả về hoa hồng...");
-        textArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        contentPanel.add(scrollPane, BorderLayout.SOUTH);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setOpaque(false); 
+        contentPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        JButton customButton = new JButton("Thông tin");
+        buttonPanel.add(customButton);
+
+        customButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(dialogHoaHong, "Đây là mô tả về hoa hồng,....");
+        }
+    });
+    }
+
+    private static void CuasoHoaTulip(){
+        System.out.println("Mo cua so Hoa Tulip");
+        frame.dispose(); //tam thoi tat cua so frame
+        dialogHoaTulip = new JDialog(frame, "Hoa Tulip", Dialog.ModalityType.APPLICATION_MODAL);
+        dialogHoaTulip.setSize(670,400);
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new BorderLayout());
+        dialogHoaTulip.setContentPane(contentPanel);
+        
+        AnhvaTextHoatulip();
+
+        dialogHoaTulip.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent ee){
+            
+            }
+        });
+        
+        dialogHoaTulip.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialogHoaTulip.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent){
+                frame.setVisible(true);
+            }
+        });
+        dialogHoaTulip.setLocationRelativeTo(null);
+        dialogHoaTulip.setVisible(true);
+    }
+    private static void AnhvaTextHoatulip(){
+        ImageIcon anh1 = new ImageIcon("hoatulip.jpg");
+        JLabel label1 = new JLabel(anh1);
+        contentPanel.add(label1, BorderLayout.WEST);
+
+        ImageIcon anh2 = new ImageIcon("hoatulip2.jpg");
+        JLabel label2 = new JLabel(anh2);
+        contentPanel.add(label2, BorderLayout.CENTER);
+
+        ImageIcon anh3 = new ImageIcon("hoahong.jpg");
+        JLabel label3 = new JLabel(anh3);
+        contentPanel.add(label3, BorderLayout.EAST);
+        
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setOpaque(false); 
+        contentPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        JButton customButton = new JButton("Thông tin");
+        buttonPanel.add(customButton);
+
+        customButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(dialogHoaHong, "Đây là mô tả về hoa Tulip,....");
+        }
+    });
+    }
+
+    private static void CuasoLatrangtri(){
+        System.out.println("Mo cua so Hoa Lá Trang Trí");
+        frame.dispose(); //tam thoi tat cua so frame
+        dialogLatrangtri = new JDialog(frame, "Lá Trang Trí", Dialog.ModalityType.APPLICATION_MODAL);
+        dialogLatrangtri.setSize(frame.getContentPane().getSize());
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new BorderLayout());
+        dialogLatrangtri.setContentPane(contentPanel);
+        
+        AnhvaTextLatrangtri();
+
+        dialogLatrangtri.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent ee){
+            
+            }
+        });
+        
+        dialogLatrangtri.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialogLatrangtri.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent){
+                frame.setVisible(true);
+            }
+        });
+        dialogLatrangtri.setLocationRelativeTo(null);
+        dialogLatrangtri.setVisible(true);
+    }
+    private static void AnhvaTextLatrangtri(){
+        ImageIcon anh1 = new ImageIcon("latrangtri.jpg");
+        JLabel label1 = new JLabel(anh1);
+        contentPanel.add(label1, BorderLayout.WEST);
+
+        ImageIcon anh2 = new ImageIcon("latrangtri2.jpg");
+        JLabel label2 = new JLabel(anh2);
+        contentPanel.add(label2, BorderLayout.CENTER);
+        
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setOpaque(false); 
+        contentPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        JButton customButton = new JButton("Thông tin");
+        buttonPanel.add(customButton);
+
+        customButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(dialogHoaHong, "Đây là mô tả về Lá trang trí,....");
+        }
+    });
+    }
+
+
+    private static void CuasoHoaCamtuCau(){
+        System.out.println("Mo cua so Hoa Cam Tu cau");
+        frame.dispose(); //tam thoi tat cua so frame
+        dialogHoaCamtuCau = new JDialog(frame, "Hoa Cẩm Tú Cầu", Dialog.ModalityType.APPLICATION_MODAL);
+        dialogHoaCamtuCau.setSize(frame.getContentPane().getSize());
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new BorderLayout());
+        dialogHoaCamtuCau.setContentPane(contentPanel);
+        
+        AnhvaTextHoaCamtucau();
+
+        dialogHoaCamtuCau.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent ee){
+            
+            }
+        });
+        
+        dialogHoaCamtuCau.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialogHoaCamtuCau.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent){
+                frame.setVisible(true);
+            }
+        });
+        dialogHoaCamtuCau.setLocationRelativeTo(null);
+        dialogHoaCamtuCau.setVisible(true);
+    }
+    private static void AnhvaTextHoaCamtucau(){
+        ImageIcon anh1 = new ImageIcon("hoacamtucau.jpg");
+        JLabel label1 = new JLabel(anh1);
+        contentPanel.add(label1, BorderLayout.WEST);
+
+        ImageIcon anh2 = new ImageIcon("hoacamtucau2.jpg");
+        JLabel label2 = new JLabel(anh2);
+        contentPanel.add(label2, BorderLayout.CENTER);
+        
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setOpaque(false); 
+        contentPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        JButton customButton = new JButton("Thông tin");
+        buttonPanel.add(customButton);
+
+        customButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(dialogHoaHong, "Đây là mô tả về hoa cẩm tú cầu,....");
+        }
+    });
     }
 
     private static void resizeImage() {
@@ -345,8 +540,7 @@ public class QuanlyCuaHang {
             }
             contentPanel.revalidate();
             contentPanel.repaint();
-            dialogHoaHong.revalidate();
-            dialogHoaHong.repaint();
+            
         }
     }
 }
